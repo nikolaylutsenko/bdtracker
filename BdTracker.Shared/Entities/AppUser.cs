@@ -10,6 +10,7 @@ public class AppUser : IdentityUser<string>
     public string? PositionName { get; set; }
     public string? CompanyId { get; set; }
     public Sex Sex { get; set; }
+    public int LoginCounter { get; set; }
 
     public virtual ICollection<IdentityUserClaim<string>>? Claims { get; set; }
     public virtual ICollection<IdentityUserLogin<string>>? Logins { get; set; }

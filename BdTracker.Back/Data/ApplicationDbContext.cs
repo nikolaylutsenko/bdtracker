@@ -64,6 +64,14 @@ namespace BdTracker.Back.Data
 
             modelBuider.Entity<AppRole>().HasData(new AppRole
             {
+                Id = "6dbb9259-ba9f-41f0-bc67-af39787f7e0a",
+                Name = AppConstants.OwnerRoleName,
+                NormalizedName = AppConstants.OwnerRoleName.ToUpper(),
+                ConcurrencyStamp = "6dbb9259-ba9f-41f0-bc67-af39787f7e0a"
+            });
+
+            modelBuider.Entity<AppRole>().HasData(new AppRole
+            {
                 Id = "0a26e36f-1626-4298-9a97-34a8c4118e08",
                 Name = AppConstants.AdminRoleName,
                 NormalizedName = AppConstants.AdminRoleName.ToUpper(),

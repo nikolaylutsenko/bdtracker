@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+using BdTracker.Back.Settings;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,7 @@ builder.Host.UseSerilog();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -74,6 +77,9 @@ builder.Services.AddTransient<CompanyOwnerValidator>();
 builder.Services.AddTransient<RegisterOwnerRequestValidator>();
 
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+
+builder.Services.Configure<AuthSettings>(configuration.GetSection(AuthSettings.SectionName));
+builder.Services.AddSingleton<IAuthSettings>(x => x.GetRequiredService<IOptions<AuthSettings>>().Value);
 
 var app = builder.Build();
 
