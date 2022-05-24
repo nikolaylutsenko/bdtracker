@@ -44,7 +44,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter(); // wtf is this for?
-builder.Services.AddIdentity<AppUser, AppRole>()
+builder.Services.AddIdentity<AppUser, AppRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
@@ -71,12 +74,15 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
+//builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
 
 builder.Services.AddTransient<CompanyOwnerValidator>();
 builder.Services.AddTransient<RegisterOwnerRequestValidator>();
+builder.Services.AddTransient<AddUserRequestValidator>();
 
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddSingleton<IPasswordService, PasswordService>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
 
 builder.Services.Configure<AuthSettings>(configuration.GetSection(AuthSettings.SectionName));
 builder.Services.AddSingleton<IAuthSettings>(x => x.GetRequiredService<IOptions<AuthSettings>>().Value);

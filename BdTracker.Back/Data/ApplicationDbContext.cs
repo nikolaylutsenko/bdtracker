@@ -104,6 +104,9 @@ namespace BdTracker.Back.Data
             });
 
             modelBuider.Entity<AppUser>().ToTable("AppUser");
+            modelBuider.Entity<AppUser>()
+                .Property(x => x.UserName)
+                .IsRequired(false);
 
             modelBuider.Entity<AppRole>().ToTable("AppRole");
 

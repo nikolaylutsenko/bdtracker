@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using BdTracker.Shared.Constants;
 using BdTracker.Shared.Entities;
 using BdTracker.Shared.Models.Request;
@@ -18,10 +19,12 @@ namespace BirthdayTracker.Backend.Infrastructure
 
         private void MapRequest()
         {
-            CreateMap<AddEmployeeRequest, AppUser>()
+            CreateMap<AddUserRequest, AppUser>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => string.Join('_', src.Name, src.Surname)))
-                .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => string.Join('_', src.Name, src.Surname).ToUpper()))
+                // TODO: need to disable providing Username or delete it from Identity User 
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => Guid.NewGuid().ToString("N")))
+                // TODO: need to disable providing Username or delete it from Identity User 
+                .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => Guid.NewGuid().ToString("N")))
                 .ForMember(dest => dest.NormalizedEmail, opt => opt.MapFrom(src => src.Email.ToUpper()));
             CreateMap<UpdateEmployeeRequest, AppUser>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
