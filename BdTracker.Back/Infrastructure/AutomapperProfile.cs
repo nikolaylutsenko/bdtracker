@@ -47,7 +47,7 @@ namespace BirthdayTracker.Backend.Infrastructure
 
         private void MapResponse()
         {
-            CreateMap<AppUser, EmployeeResponse>();
+            CreateMap<AppUser, UserResponse>();
             CreateMap<AppUser, LoginResponse>();
 
             // mapping error message into response

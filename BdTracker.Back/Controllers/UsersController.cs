@@ -12,6 +12,7 @@ using BdTracker.Shared.Models.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BdTracker.Back.Controllers
 {
@@ -42,7 +43,7 @@ namespace BdTracker.Back.Controllers
         public async Task<IActionResult> AddUserAsync(AddUserRequest request)
         {
             // get ID of person who create new User
-            var creatorId = HttpContext?.User?.Claims.First(x => x.Type == "Id").Value;
+            var creatorId = HttpContext?.User?.Claims.FirstOrDefault(x => x.Type == "Id")?.Value;
 
             if (creatorId == null)
             {
@@ -88,6 +89,26 @@ namespace BdTracker.Back.Controllers
 
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAllUsersAsync()
+        {
+            // If you a SuperAdmin you will return all users in application
+            if (HttpContext.User.IsInRole("SuperAdmin"))
+            {
+                var allUsers = await _userManager.Users.ToListAsync();
+
+                return Ok(_mapper.Map<IEnumerable<UserResponse>>(allUsers));
+            }
+
+            // companyId is for filter of users that will be returned
+            var usersCompanyId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "CompanyId")?.Value;
+
+            var users = await _userManager.Users.Where(u => u.CompanyId == usersCompanyId).ToListAsync();
+
+            return Ok(_mapper.Map<IEnumerable<UserResponse>>(users));
         }
 
     }

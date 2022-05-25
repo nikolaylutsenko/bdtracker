@@ -2,7 +2,7 @@
 
 namespace BdTracker.Shared.Models.Response;
 
-public record EmployeeResponse
+public record UserResponse
 {
     public string? Id { get; set; }
     public string? Name { get; set; }

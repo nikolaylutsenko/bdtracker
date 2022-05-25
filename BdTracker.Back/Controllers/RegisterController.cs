@@ -79,7 +79,7 @@ namespace BdTracker.Back.Controllers
 
                 if (setRoleResult.Succeeded)
                 {
-                    return Ok(_mapper.Map<EmployeeResponse>(companyOwner));
+                    return Ok(_mapper.Map<UserResponse>(companyOwner));
                 }
 
                 var errors = _mapper.Map<IEnumerable<ErrorResponse>>(setRoleResult.Errors);
