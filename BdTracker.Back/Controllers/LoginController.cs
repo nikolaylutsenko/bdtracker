@@ -57,8 +57,8 @@ namespace BdTracker.Back.Controllers
                     audience: _authSettings.Audience,
                     new List<Claim>
                     {
-                        new Claim("Name", identityUsr.Id.ToString()),
                         new Claim("Id", identityUsr.Id.ToString()),
+                        new Claim("CompanyId", identityUsr.CompanyId.ToString()),
                         new Claim(ClaimTypes.Role, userRole.First().ToString())
                     },
                     signingCredentials: credentials);
