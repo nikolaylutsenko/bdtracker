@@ -1,20 +1,22 @@
-using BdTracker.Back.Data;
-using BdTracker.Back.Services;
-using BdTracker.Back.Validators;
-using BdTracker.Shared.Entities;
-using BdTracker.Back.Services.Interfaces;
-using FluentValidation.AspNetCore;
+using System.Text;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using System.Text;
-using BdTracker.Back.Settings;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
+using BdTracker.Back.Data;
 using BdTracker.Back.Middlewares;
+using BdTracker.Back.Services;
+using BdTracker.Back.Services.Interfaces;
+using BdTracker.Back.Settings;
+using BdTracker.Back.Validators;
+using BdTracker.Shared.Entities;
+
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,7 @@ builder.Host.UseSerilog();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
+builder.Services.AddHealthChecks();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -103,6 +106,8 @@ builder.Services.AddSingleton<IAuthSettings>(x => x.GetRequiredService<IOptions<
 
 var app = builder.Build();
 
+app.UseHttpLogging();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -116,5 +121,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 app.UseMiddleware<ExceptionMiddleware>();
 app.Run();
