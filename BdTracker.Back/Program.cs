@@ -14,6 +14,7 @@ using BdTracker.Back.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using BdTracker.Back.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,4 +116,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.UseMiddleware<ExceptionMiddleware>();
 app.Run();
