@@ -13,7 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace BdTracker.Back.Controllers
 {
     [ApiController]
-    [Route("api/v1/register")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
     public class RegisterController : ControllerBase
     {

@@ -15,7 +15,8 @@ using Microsoft.IdentityModel.Tokens;
 namespace BdTracker.Back.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
     public class LoginController : ControllerBase
     {

@@ -16,7 +16,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace BdTracker.Back.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
