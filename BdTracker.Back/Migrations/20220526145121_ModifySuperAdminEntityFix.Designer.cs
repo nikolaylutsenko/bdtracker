@@ -3,6 +3,7 @@ using System;
 using BdTracker.Back.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BdTracker.Back.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220526145121_ModifySuperAdminEntityFix")]
+    partial class ModifySuperAdminEntityFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
@@ -203,7 +205,7 @@ namespace BdTracker.Back.Migrations
                         new
                         {
                             UserId = "25d733fa-b5ce-41fe-a868-beea7723a3e5",
-                            RoleId = "58f3dea3-67eb-4284-b4bd-e4504d8e523e"
+                            RoleId = "0a26e36f-1626-4298-9a97-34a8c4118e08"
                         });
                 });
 

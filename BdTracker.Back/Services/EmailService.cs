@@ -12,8 +12,8 @@ public class EmailService : IEmailService
         _logger = logger;
     }
 
-    public Task SendGreetings(AppUser user, string password)
+    public async Task SendGreetings(AppUser user, string password)
     {
-        return Task.Factory.StartNew(() => _logger.LogDebug(user.Name, password));
+        await Task.Factory.StartNew(() => _logger.LogWarning($"{user.Name} - {password}"));
     }
 }

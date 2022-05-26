@@ -89,18 +89,20 @@ namespace BdTracker.Back.Data
             modelBuider.Entity<AppUser>().HasData(new AppUser
             {
                 Id = "25d733fa-b5ce-41fe-a868-beea7723a3e5",
-                UserName = "admin",
-                Email = "admin@admin.com",
+                UserName = "SuperAdmin",
+                Email = "super.admin@bdtracker.com",
                 EmailConfirmed = true,
                 ConcurrencyStamp = "25d733fa-b5ce-41fe-a868-beea7723a3e5",
-                NormalizedEmail = "admin@admin.com".ToUpper(),
-                NormalizedUserName = "admin".ToUpper(),
-                PasswordHash = "AQAAAAEAACcQAAAAENCkLthTPd0r7CXtX5/yOEaaKYTHaxSS19gjdFYysigNskCv/encZ9iMB6heC6TPvA==", // T1VsPaNoCbI@
+                NormalizedEmail = "super.admin@bdtracker.com".ToUpper(),
+                NormalizedUserName = AppConstants.SuperAdminRoleName.ToUpper(),
+                PasswordHash = "AQAAAAEAACcQAAAAENfsGLvH3eW8fdbsA4JidLp7p1gnmP1HukUsZ0EHQzKZ20TmxCd7LJmOYmiazZDMDw==",
                 SecurityStamp = "25d733fa-b5ce-41fe-a868-beea7723a3e5",
                 BirthDay = DateTime.Parse("2022-01-22T00:00:00"),
-                Name = "Admin",
+                Name = "Super",
                 Surname = "Admin",
-                PositionName = "Admin",
+                PositionName = "Super Admin",
+                CompanyId = "506c4655-0053-414e-bb8f-9612876ab2a1",
+                Sex = Sex.Other
             });
 
             modelBuider.Entity<AppUser>().ToTable("AppUser");
@@ -114,13 +116,21 @@ namespace BdTracker.Back.Data
 
             modelBuider.Entity<AppUserAppRole>().HasData(new AppUserAppRole
             {
-                RoleId = "0a26e36f-1626-4298-9a97-34a8c4118e08",
+                RoleId = "58f3dea3-67eb-4284-b4bd-e4504d8e523e",
                 UserId = "25d733fa-b5ce-41fe-a868-beea7723a3e5"
             });
 
             modelBuider.Entity<Company>()
                 .HasMany(emp => emp.Employees)
                 .WithOne(company => company.Company);
+
+            modelBuider.Entity<Company>()
+                .HasData(new Company
+                {
+                    Id = "506c4655-0053-414e-bb8f-9612876ab2a1",
+                    Name = "BdTracker",
+                    CompanyOwnerId = "25d733fa-b5ce-41fe-a868-beea7723a3e5"
+                });
         }
 
         public DbSet<Company>? Companies { get; set; }

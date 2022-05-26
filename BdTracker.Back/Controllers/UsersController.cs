@@ -27,9 +27,13 @@ namespace BdTracker.Back.Controllers
         private readonly IMapper _mapper;
         private readonly AddUserRequestValidator _addUserRequestValidator;
         private readonly IEmailService _emailService;
+        private readonly UpdateUserRequestValidator _updateUserRequestValidator;
 
-        public UsersController(UserManager<AppUser> userManager, IPasswordService passwordService, IEmailService emailService, ILogger<UsersController> logger, IMapper mapper, AddUserRequestValidator addUserRequestValidator)
+        public UsersController(UserManager<AppUser> userManager, IPasswordService passwordService, IEmailService emailService,
+            ILogger<UsersController> logger, IMapper mapper, AddUserRequestValidator addUserRequestValidator,
+            UpdateUserRequestValidator updateUserRequestValidator)
         {
+            _updateUserRequestValidator = updateUserRequestValidator;
             _emailService = emailService;
             _userManager = userManager;
             _passwordService = passwordService;
@@ -87,8 +91,63 @@ namespace BdTracker.Back.Controllers
             // TODO: here must be send Email to registered user
             await _emailService.SendGreetings(user, userPassword);
 
-
             return Ok();
+        }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUserAsync(string id, UpdateUserRequest request)
+        {
+            var validationResults = await _updateUserRequestValidator.ValidateAsync(request);
+
+            if (!validationResults.IsValid)
+            {
+                var errors = _mapper.Map<IEnumerable<ErrorResponse>>(validationResults.Errors);
+
+                return BadRequest(errors);
+            }
+
+            var userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id")?.Value;
+            var userCompanyId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "CompanyId")?.Value;
+
+
+            if (HttpContext.User.IsInRole("SuperAdmin") ||
+                HttpContext.User.IsInRole("Owner") ||
+                HttpContext.User.IsInRole("Admin") ||
+                userId == id)
+            {
+                AppUser? userToUpdate;
+
+                // if user is SuperAdmin we will search in entire db else only in company
+                if (HttpContext.User.IsInRole("SuperAdmin"))
+                {
+                    userToUpdate = await _userManager.FindByIdAsync(id);
+                }
+                else
+                {
+                    if (userCompanyId == null)
+                    {
+                        var errors = new List<ErrorResponse> { new ErrorResponse($"Your company is not found") };
+
+                        return BadRequest(errors);
+                    }
+
+                    userToUpdate = await _userManager.Users.Where(x => x.CompanyId == userCompanyId).FirstOrDefaultAsync(x => x.Id == id);
+                }
+
+                if (userToUpdate == null)
+                {
+                    var errors = new List<ErrorResponse> { new ErrorResponse($"User with provide id {id} not found") };
+
+                    return BadRequest(errors);
+                }
+
+                userToUpdate = _mapper.Map(request, userToUpdate);
+                await _userManager.UpdateAsync(userToUpdate);
+            }
+
+            return NoContent();
+
         }
 
         [HttpGet]
@@ -109,6 +168,73 @@ namespace BdTracker.Back.Controllers
             var users = await _userManager.Users.Where(u => u.CompanyId == usersCompanyId).ToListAsync();
 
             return Ok(_mapper.Map<IEnumerable<UserResponse>>(users));
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetUserAsync(string id)
+        {
+            // If you a SuperAdmin you will return all users in application
+            if (HttpContext.User.IsInRole("SuperAdmin"))
+            {
+                var firstInAllUsers = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+                return Ok(_mapper.Map<UserResponse>(firstInAllUsers));
+            }
+
+            // companyId is for filter of users that will be returned
+            var usersCompanyId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "CompanyId")?.Value;
+
+            var companyUsers = await _userManager.Users.Where(u => u.CompanyId == usersCompanyId).ToListAsync();
+            var firstInCompanyUsers = companyUsers.FirstOrDefault(x => x.Id == id);
+
+            return Ok(_mapper.Map<UserResponse>(firstInCompanyUsers));
+        }
+
+        [HttpDelete("id")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUserAsync(string id)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id")?.Value;
+            var userCompanyId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "CompanyId")?.Value;
+
+
+            if (HttpContext.User.IsInRole("SuperAdmin") ||
+                HttpContext.User.IsInRole("Admin") ||
+                userId == id)
+            {
+                AppUser? userToDelete;
+
+                // if user is SuperAdmin we will search in entire db else only in company
+                if (HttpContext.User.IsInRole("SuperAdmin"))
+                {
+                    userToDelete = await _userManager.FindByIdAsync(id);
+                }
+                else
+                {
+                    if (userCompanyId == null)
+                    {
+                        var errors = new List<ErrorResponse> { new ErrorResponse($"Your company is not found") };
+
+                        return BadRequest(errors);
+                    }
+
+                    userToDelete = await _userManager.Users.Where(x => x.CompanyId == userCompanyId).FirstOrDefaultAsync(x => x.Id == id);
+                }
+
+                if (userToDelete == null)
+                {
+                    var errors = new List<ErrorResponse> { new ErrorResponse($"User with provide id {id} not found") };
+
+                    return BadRequest(errors);
+                }
+
+                await _userManager.DeleteAsync(userToDelete);
+
+                return NoContent();
+            }
+
+            return BadRequest();
         }
 
     }

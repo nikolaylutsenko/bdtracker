@@ -26,6 +26,7 @@ namespace BirthdayTracker.Backend.Infrastructure
                 // TODO: need to disable providing Username or delete it from Identity User 
                 .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => Guid.NewGuid().ToString("N")))
                 .ForMember(dest => dest.NormalizedEmail, opt => opt.MapFrom(src => src.Email.ToUpper()));
+            CreateMap<UpdateUserRequest, AppUser>();
             CreateMap<UpdateEmployeeRequest, AppUser>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => string.Join('_', src.Name, src.Surname)))

@@ -96,6 +96,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddTransient<CompanyOwnerValidator>();
 builder.Services.AddTransient<RegisterOwnerRequestValidator>();
 builder.Services.AddTransient<AddUserRequestValidator>();
+builder.Services.AddTransient<UpdateUserRequestValidator>();
 
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddSingleton<IPasswordService, PasswordService>();
