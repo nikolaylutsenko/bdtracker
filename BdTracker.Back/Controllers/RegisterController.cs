@@ -1,14 +1,16 @@
 using System.Net.Mime;
-using System.Text.Json;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+
 using AutoMapper;
+
 using BdTracker.Back.Services.Interfaces;
 using BdTracker.Back.Validators;
 using BdTracker.Shared.Constants;
 using BdTracker.Shared.Entities;
 using BdTracker.Shared.Models.Request;
 using BdTracker.Shared.Models.Response;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BdTracker.Back.Controllers
 {
@@ -34,7 +36,8 @@ namespace BdTracker.Back.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterOwnerAsync(RegisterOwnerRequest request)
         {
@@ -87,7 +90,7 @@ namespace BdTracker.Back.Controllers
             }
             else
             {
-                // todo: rewrite this return, because it is not correct
+                // TODO: rewrite this return, because it is not correct
                 var errors = _mapper.Map<IEnumerable<ErrorResponse>>(addUserResult.Errors);
                 return BadRequest(errors);
             }

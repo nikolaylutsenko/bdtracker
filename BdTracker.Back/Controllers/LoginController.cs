@@ -2,15 +2,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
-using AutoMapper;
-using BdTracker.Back.Settings;
-using BdTracker.Shared.Entities;
-using BdTracker.Shared.Models.Request;
-using BdTracker.Shared.Models.Response;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+
+using AutoMapper;
+
+using BdTracker.Back.Settings;
+using BdTracker.Shared.Entities;
+using BdTracker.Shared.Models.Request;
+using BdTracker.Shared.Models.Response;
 
 namespace BdTracker.Back.Controllers
 {
@@ -35,6 +38,9 @@ namespace BdTracker.Back.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> LoginAsync(LoginRequest request)
         {
             var identityUsr = await _userManager.FindByEmailAsync(request.Email);
@@ -75,7 +81,7 @@ namespace BdTracker.Back.Controllers
             }
             else
             {
-                // todo: add User lock after 10 unsuccessful attempt
+                // TODO: add User lock after 10 unsuccessful attempt
                 _logger.LogError($"User with Email {request.Email} enter wrong password");
                 return Unauthorized(new List<ErrorResponse> { new ErrorResponse("You provide wrong password") });
             }

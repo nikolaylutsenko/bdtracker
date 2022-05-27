@@ -1,18 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 using AutoMapper;
+
 using BdTracker.Back.Services.Interfaces;
 using BdTracker.Back.Validators;
 using BdTracker.Shared.Constants;
 using BdTracker.Shared.Entities;
 using BdTracker.Shared.Models.Request;
 using BdTracker.Shared.Models.Response;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BdTracker.Back.Controllers
 {
@@ -44,6 +42,8 @@ namespace BdTracker.Back.Controllers
 
         [HttpPost]
         [Authorize(Roles = "SuperAdmin,Owner,Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddUserAsync(AddUserRequest request)
         {
             // get ID of person who create new User
@@ -96,6 +96,8 @@ namespace BdTracker.Back.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateUserAsync(string id, UpdateUserRequest request)
         {
             var validationResults = await _updateUserRequestValidator.ValidateAsync(request);
@@ -152,6 +154,7 @@ namespace BdTracker.Back.Controllers
 
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllUsersAsync()
         {
             // If you a SuperAdmin you will return all users in application
@@ -172,6 +175,7 @@ namespace BdTracker.Back.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUserAsync(string id)
         {
             // If you a SuperAdmin you will return all users in application
@@ -191,8 +195,10 @@ namespace BdTracker.Back.Controllers
             return Ok(_mapper.Map<UserResponse>(firstInCompanyUsers));
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteUserAsync(string id)
         {
             var userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id")?.Value;
@@ -237,5 +243,41 @@ namespace BdTracker.Back.Controllers
             return BadRequest();
         }
 
+        [HttpGet("{id}/set-admin")]
+        [Authorize(Roles = "SuperAdmin,Owner")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SetAdminRoleAsync(string id)
+        {
+            var companyId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "CompanyId")?.Value;
+
+            if (companyId == null)
+            {
+                var errors = new List<ErrorResponse> { new ErrorResponse("Your company does't exit") };
+                return BadRequest(errors);
+            }
+
+            AppUser? user = null;
+
+            if (HttpContext.User.IsInRole("SuperAdmin"))
+            {
+                user = await _userManager.FindByIdAsync(id);
+            }
+            else
+            {
+                user = await _userManager.Users.Where(x => x.CompanyId == companyId).FirstOrDefaultAsync(x => x.Id == id);
+            }
+
+            if (user == null)
+            {
+                var errors = new List<ErrorResponse> { new ErrorResponse($"User with id {id} not found") };
+                return BadRequest();
+            }
+
+            await _userManager.RemoveFromRoleAsync(user, AppConstants.UserRoleName);
+            await _userManager.AddToRoleAsync(user, AppConstants.AdminRoleName);
+
+            return NoContent();
+        }
     }
 }
