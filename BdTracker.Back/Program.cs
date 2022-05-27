@@ -55,9 +55,10 @@ builder.Services.AddApiVersioning(options =>
         new MediaTypeApiVersionReader("x-api-version"));
 });
 
+var connString = builder.Configuration.GetConnectionString("ConnectionName").Replace("~", builder.Environment.ContentRootPath);
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("ConnectionName"));
+    options.UseSqlite(connString);
 });
 
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter(); // wtf is this for?
@@ -104,6 +105,12 @@ builder.Services.AddSingleton<IEmailService, EmailService>();
 
 builder.Services.Configure<AuthSettings>(configuration.GetSection(AuthSettings.SectionName));
 builder.Services.AddSingleton<IAuthSettings>(x => x.GetRequiredService<IOptions<AuthSettings>>().Value);
+
+builder.Services.Configure<SecretAccessSettings>(configuration.GetSection(SecretAccessSettings.SectionName));
+builder.Services.AddSingleton<ISecretAccessSettings>(x => x.GetRequiredService<IOptions<SecretAccessSettings>>().Value);
+
+builder.Services.Configure<IConnectionStringSettings>(configuration.GetSection(ConnectionStringSettings.SectionName));
+builder.Services.AddSingleton<IConnectionStringSettings>(x => x.GetRequiredService<IOptions<ConnectionStringSettings>>().Value);
 
 var app = builder.Build();
 
