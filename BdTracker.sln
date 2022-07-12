@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdTracker.Shared", "BdTracker.Shared\BdTracker.Shared.csproj", "{A12E1B7E-7383-4CDF-A19E-0FFD733DEFDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdTracker.Back", "BdTracker.Back\BdTracker.Back.csproj", "{A25737F1-BB75-4547-A85F-B0E8EAC644EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A12E1B7E-7383-4CDF-A19E-0FFD733DEFDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A12E1B7E-7383-4CDF-A19E-0FFD733DEFDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A12E1B7E-7383-4CDF-A19E-0FFD733DEFDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A12E1B7E-7383-4CDF-A19E-0FFD733DEFDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A25737F1-BB75-4547-A85F-B0E8EAC644EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A25737F1-BB75-4547-A85F-B0E8EAC644EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A25737F1-BB75-4547-A85F-B0E8EAC644EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A25737F1-BB75-4547-A85F-B0E8EAC644EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
