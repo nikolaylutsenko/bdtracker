@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdTracker.Shared", "BdTrack
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdTracker.Back", "BdTracker.Back\BdTracker.Back.csproj", "{A25737F1-BB75-4547-A85F-B0E8EAC644EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdTracker.Blazor", "BdTracker.Blazor\BdTracker.Blazor.csproj", "{60E3C563-88D3-4028-9D58-DF1C70798266}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{A25737F1-BB75-4547-A85F-B0E8EAC644EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A25737F1-BB75-4547-A85F-B0E8EAC644EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A25737F1-BB75-4547-A85F-B0E8EAC644EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60E3C563-88D3-4028-9D58-DF1C70798266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60E3C563-88D3-4028-9D58-DF1C70798266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60E3C563-88D3-4028-9D58-DF1C70798266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60E3C563-88D3-4028-9D58-DF1C70798266}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
