@@ -17,25 +17,25 @@ namespace BdTracker.Back.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IPasswordService _passwordService;
-        private readonly ILogger<UsersController> _logger;
+        //private readonly ILogger<UsersController> _logger;
         private readonly IMapper _mapper;
         private readonly AddUserRequestValidator _addUserRequestValidator;
         private readonly IEmailService _emailService;
         private readonly UpdateUserRequestValidator _updateUserRequestValidator;
 
         public UsersController(UserManager<AppUser> userManager, IPasswordService passwordService, IEmailService emailService,
-            ILogger<UsersController> logger, IMapper mapper, AddUserRequestValidator addUserRequestValidator,
-            UpdateUserRequestValidator updateUserRequestValidator)
+            Logger<UsersController> logger, IMapper mapper, AddUserRequestValidator addUserRequestValidator,
+            UpdateUserRequestValidator updateUserRequestValidator) : base(logger)
         {
             _updateUserRequestValidator = updateUserRequestValidator;
             _emailService = emailService;
             _userManager = userManager;
             _passwordService = passwordService;
-            _logger = logger;
+            //_logger = logger;
             _mapper = mapper;
             _addUserRequestValidator = addUserRequestValidator;
         }

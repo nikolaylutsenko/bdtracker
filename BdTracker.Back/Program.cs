@@ -17,6 +17,7 @@ using BdTracker.Back.Validators;
 using BdTracker.Shared.Entities;
 
 using Serilog;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,8 +92,6 @@ builder.Services.AddAuthentication(o =>
 builder.Services.AddAuthorization();
 
 builder.Services.AddAutoMapper(typeof(Program));
-
-//builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
 
 builder.Services.AddTransient<CompanyOwnerValidator>();
 builder.Services.AddTransient<RegisterOwnerRequestValidator>();
