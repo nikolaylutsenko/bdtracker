@@ -95,7 +95,7 @@ namespace BdTracker.Back.Data
                 ConcurrencyStamp = "25d733fa-b5ce-41fe-a868-beea7723a3e5",
                 NormalizedEmail = "super.admin@bdtracker.com".ToUpper(),
                 NormalizedUserName = AppConstants.SuperAdminRoleName.ToUpper(),
-                PasswordHash = "AQAAAAEAACcQAAAAENfsGLvH3eW8fdbsA4JidLp7p1gnmP1HukUsZ0EHQzKZ20TmxCd7LJmOYmiazZDMDw==",
+                PasswordHash = "AQAAAAEAACcQAAAAEO1PQ5JXbydpkx3TOGqWM8uW1z3dMbYFjhRqDXzTAQXzxdFyF5f6VDdMmnJk8z44TA==",
                 SecurityStamp = "25d733fa-b5ce-41fe-a868-beea7723a3e5",
                 BirthDay = DateTime.Parse("2022-01-22T00:00:00"),
                 Name = "Super",
