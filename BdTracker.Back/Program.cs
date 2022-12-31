@@ -18,6 +18,7 @@ using BdTracker.Shared.Entities;
 
 using Serilog;
 using Microsoft.OpenApi.Models;
+using Serilog.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,9 +32,10 @@ var configuration = new ConfigurationBuilder()
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
-    .MinimumLevel.Debug()
-    .WriteTo.Console()
-    .CreateLogger();
+    .Enrich.WithExceptionDetails()
+    .MinimumLevel.Information()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateBootstrapLogger();
 
 builder.Host.UseSerilog();
 
