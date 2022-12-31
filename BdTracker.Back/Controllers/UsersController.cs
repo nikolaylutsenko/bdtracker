@@ -21,21 +21,19 @@ namespace BdTracker.Back.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IPasswordService _passwordService;
-        //private readonly ILogger<UsersController> _logger;
         private readonly IMapper _mapper;
         private readonly AddUserRequestValidator _addUserRequestValidator;
         private readonly IEmailService _emailService;
         private readonly UpdateUserRequestValidator _updateUserRequestValidator;
 
         public UsersController(UserManager<AppUser> userManager, IPasswordService passwordService, IEmailService emailService,
-            Logger<UsersController> logger, IMapper mapper, AddUserRequestValidator addUserRequestValidator,
+            ILogger<UsersController> logger, IMapper mapper, AddUserRequestValidator addUserRequestValidator,
             UpdateUserRequestValidator updateUserRequestValidator) : base(logger)
         {
             _updateUserRequestValidator = updateUserRequestValidator;
             _emailService = emailService;
             _userManager = userManager;
             _passwordService = passwordService;
-            //_logger = logger;
             _mapper = mapper;
             _addUserRequestValidator = addUserRequestValidator;
         }
