@@ -34,8 +34,8 @@ Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .Enrich.WithExceptionDetails()
     .MinimumLevel.Information()
-    .WriteTo.Console()
-    .CreateLogger();
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateBootstrapLogger();
 
 builder.Host.UseSerilog();
 
