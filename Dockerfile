@@ -1,5 +1,4 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS base
-WORKDIR /app
 EXPOSE 7037
 
 ENV ASPNETCORE_URLS=http://+:7037
