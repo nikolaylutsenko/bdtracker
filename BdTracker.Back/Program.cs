@@ -35,6 +35,7 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.WithExceptionDetails()
     .MinimumLevel.Information()
     .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .WriteTo.File("Logs/log.txt")
     .CreateBootstrapLogger();
 
 builder.Host.UseSerilog();
