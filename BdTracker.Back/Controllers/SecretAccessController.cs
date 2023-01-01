@@ -15,14 +15,16 @@ namespace BdTracker.Back.Controllers
         private readonly IConnectionStringSettings _connectionStringSettings;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<SecretAccessController> _logger;
+        private readonly IConfiguration _configuration;
 
         public SecretAccessController(ISecretAccessSettings secretAccessSettings, IConnectionStringSettings connectionStringSettings,
-        IWebHostEnvironment webHostEnvironment, ILogger<SecretAccessController> logger)
+        IWebHostEnvironment webHostEnvironment, ILogger<SecretAccessController> logger, IConfiguration configuration)
         {
             _secretAccessSettings = secretAccessSettings;
             _connectionStringSettings = connectionStringSettings;
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
+            _configuration = configuration;
         }
 
         [HttpPost("db-file")]
@@ -35,11 +37,8 @@ namespace BdTracker.Back.Controllers
                 return Unauthorized("Access denied!");
             }
 
-            // TODO: its bead, better re-wright it
-            var connectionString = "App_Data\\bdtdatabase.db";
-            var env = _webHostEnvironment.ContentRootPath;
-            var filePath = string.Concat(env, connectionString);
-
+            // TODO: its wrong, better re-wright it
+            var filePath = "App_Data/bdtdatabase.db";
             var data = await System.IO.File.ReadAllBytesAsync(filePath);
 
             return new FileContentResult(data, "application/database");
